@@ -18,19 +18,12 @@ AI Resume Matcher is a Flask-based web application that uses machine learning to
 
 AI-Resume-Matcher/
 │── app.py               # Flask application backend (Generated using ChatGPT)
-
 │── index.html           # Frontend UI (Generated using ChatGPT)
-
 │── AI Matcher.ipynb     # Jupyter Notebook for model training
-
 │── Resume_dataset.csv   # Dataset used for training
-
 │── resumeClassifier.pkl # Trained ML model
-
 │── resumeVector.pkl     # TF-IDF vectorizer
-
 │── requirements.txt     # Required dependencies
-
 │── uploads/             # Folder to store uploaded resumes
 
 🧠 Model Training
