@@ -7,7 +7,6 @@ AI Resume Matcher 📄🔍
 🚀 Features
 
   🏗 Upload a PDF resume and get job category predictions.
-
   🔍 Uses TF-IDF vectorization and a trained ML model.
 
   📊 Displays the top 3 predicted categories with probabilities.
