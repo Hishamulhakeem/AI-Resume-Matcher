@@ -10,28 +10,15 @@ vectorizer = joblib.load('resumeVector.pkl')
 # Streamlit page configuration
 st.set_page_config(page_title="AI Resume Matcher", layout="centered")
 
-# Custom styling for a black-and-white theme
+# Custom styling for a clean black-and-white theme with a centered button
 st.markdown("""
     <style>
         body {
             background-color: #1a1a1a;
             color: #f4f4f4;
             font-family: Arial, sans-serif;
-        }
-        .stButton button {
-            background-color: #000;
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 10px;
-            border: 2px solid #444;
-            font-weight: bold;
-            margin-top: 15px;
-            transition: 0.3s;
-        }
-        .stButton button:hover {
-            background-color: #333;
-            border-color: #777;
-            transform: scale(1.05);
+            margin: 0;
+            padding: 0;
         }
         .container {
             background-color: #262626;
@@ -39,8 +26,11 @@ st.markdown("""
             border-radius: 15px;
             box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.1);
             text-align: center;
-            margin-top: 50px;
+            margin-top: 80px;
             margin-bottom: 30px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
         }
         h1 {
             margin-bottom: 25px;
@@ -48,6 +38,25 @@ st.markdown("""
             border-bottom: 2px solid #777;
             padding-bottom: 10px;
             letter-spacing: 1px;
+        }
+        .stButton button {
+            background-color: #000;
+            color: #fff;
+            padding: 10px 30px;
+            border-radius: 10px;
+            border: 2px solid #444;
+            font-weight: bold;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            transition: 0.3s;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .stButton button:hover {
+            background-color: #333;
+            border-color: #777;
+            transform: scale(1.05);
         }
         ul {
             list-style: none;
@@ -89,7 +98,11 @@ def extract_text(pdf_file):
 
 # Analyze button and prediction logic
 if uploaded_file is not None:
-    if st.button("Analyze Resume"):
+    centered_button = st.markdown('<div style="text-align: center;">', unsafe_allow_html=True)
+    analyze_button = st.button("Analyze Resume")
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    if analyze_button:
         resume_text = extract_text(uploaded_file)
 
         # Predicting top 3 categories
