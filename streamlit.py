@@ -65,36 +65,37 @@ st.markdown("""
             border-color: #777;
             transform: scale(1.05);
         }
-        .prediction-box {
-            background-color: #333;
-            padding: 20px;
-            border-radius: 12px;
-            margin-top: 30px;
-            margin-bottom: 20px;
-            box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.1);
-        }
-        ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        li {
+        .category-box {
             background-color: #444;
-            margin-bottom: 10px;
-            padding: 10px;
+            margin-bottom: 15px;
+            padding: 15px;
             border-radius: 8px;
-            display: flex;
-            justify-content: space-between;
-            color: #f4f4f4;
-            font-weight: bold;
+            text-align: center;
         }
-        .category {
-            text-align: left;
+        .category-name {
             color: #b5b5b5;
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 5px;
         }
-        .confidence {
+        .percentage-bar {
+            background-color: #333;
+            border-radius: 10px;
+            height: 25px;
+            margin-top: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+        .percentage-fill {
+            background-color: #76c7c0;
+            height: 100%;
+            border-radius: 10px;
             text-align: right;
-            color: #76c7c0;
+            padding-right: 10px;
+            line-height: 25px;
+            color: #fff;
+            font-weight: bold;
+            transition: width 1s ease-in-out;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -124,11 +125,15 @@ if uploaded_file is not None:
         top_indices = np.argsort(y_pred)[-3:][::-1]
         top_predictions = [(model.classes_[i], y_pred[i] * 100) for i in top_indices]
 
-        # Structured box for predictions
-        st.markdown('<div class="prediction-box">', unsafe_allow_html=True)
         st.subheader("Top Matching Job Categories:")
-        st.markdown("<ul>", unsafe_allow_html=True)
+        
+        # Individual boxes for each category
         for category, confidence in top_predictions:
-            st.markdown(f"<li><span class='category'>{category}</span> <span class='confidence'>{confidence:.2f}%</span></li>", unsafe_allow_html=True)
-        st.markdown("</ul>", unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
+            st.markdown(f"""
+                <div class="category-box">
+                    <div class="category-name">{category}</div>
+                    <div class="percentage-bar">
+                        <div class="percentage-fill" style="width: {confidence}%;">{confidence:.2f}%</div>
+                    </div>
+                </div>
+            """, unsafe_allow_html=True)
