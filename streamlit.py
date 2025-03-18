@@ -89,11 +89,7 @@ st.markdown("""
         .uploadedFile {
             display: none;
         }
-        .stFileUploader {
-            background-color: transparent;
-            border: none;
-            box-shadow: none;
-        }
+        
     </style>
 """, unsafe_allow_html=True)
 
