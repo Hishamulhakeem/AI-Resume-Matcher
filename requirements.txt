@@ -1,0 +1,7 @@
+Flask
+scikit-learn==1.3.2
+joblib==1.2.0
+pymupdf
+PyPDF2
+setuptools  
+gunicorn
