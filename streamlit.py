@@ -114,7 +114,7 @@ if uploaded_file is not None:
         top_indices = np.argsort(y_pred)[-3:][::-1]
         top_predictions = [(model.classes_[i], y_pred[i] * 100) for i in top_indices]
 
-        st.subheader("Top Matching Job Categories:")
+        st.subheader("Top Matching Jobs:")
         
         # Simple rows with category on left and percentage on right
         for category, confidence in top_predictions:
