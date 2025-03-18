@@ -10,7 +10,7 @@ vectorizer = joblib.load('resumeVector.pkl')
 # Streamlit page configuration
 st.set_page_config(page_title="AI Resume Matcher", layout="centered")
 
-# Custom styling for a clean black-and-white theme with centered title
+# Custom styling
 st.markdown("""
     <style>
         body {
@@ -20,26 +20,31 @@ st.markdown("""
             margin: 0;
             padding: 0;
         }
+        .main-container {
+            margin-top: 30px;
+            padding: 40px;
+            text-align: center;
+        }
+        h1 {
+            margin-top: 20px;
+            margin-bottom: 30px;
+            font-size: 36px;
+            font-weight: bold;
+            color: #f4f4f4;
+            border-bottom: 2px solid #777;
+            padding-bottom: 10px;
+            letter-spacing: 1px;
+        }
         .container {
             background-color: #262626;
             padding: 40px;
             border-radius: 15px;
             box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.1);
-            text-align: center;
             margin-top: 40px;
             margin-bottom: 30px;
             max-width: 500px;
             margin-left: auto;
             margin-right: auto;
-        }
-        h1 {
-            margin-bottom: 25px;
-            font-size: 32px;
-            border-bottom: 2px solid #777;
-            padding-bottom: 10px;
-            letter-spacing: 1px;
-            color: #f4f4f4;
-            text-align: center;
         }
         .stButton button {
             background-color: #000;
@@ -60,13 +65,20 @@ st.markdown("""
             border-color: #777;
             transform: scale(1.05);
         }
+        .prediction-box {
+            background-color: #333;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 30px;
+            box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.1);
+        }
         ul {
             list-style: none;
             padding: 0;
-            margin-top: 25px;
+            margin: 0;
         }
         li {
-            background-color: #333;
+            background-color: #444;
             margin-bottom: 10px;
             padding: 10px;
             border-radius: 8px;
@@ -86,9 +98,8 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Main container
-st.markdown('<div class="container">', unsafe_allow_html=True)
-st.markdown('<h1>AI Resume Matcher</h1>', unsafe_allow_html=True)
+# Main container for title
+st.markdown('<div class="main-container"><h1>AI Resume Matcher</h1></div>', unsafe_allow_html=True)
 
 # File uploader for resume (PDF format)
 uploaded_file = st.file_uploader("Upload your resume (PDF format)", type=['pdf'])
@@ -112,10 +123,11 @@ if uploaded_file is not None:
         top_indices = np.argsort(y_pred)[-3:][::-1]
         top_predictions = [(model.classes_[i], y_pred[i] * 100) for i in top_indices]
 
+        # Prediction box with styling
+        st.markdown('<div class="prediction-box">', unsafe_allow_html=True)
         st.subheader("Top Matching Job Categories:")
         st.markdown("<ul>", unsafe_allow_html=True)
         for category, confidence in top_predictions:
             st.markdown(f"<li><span class='category'>{category}</span> <span class='confidence'>{confidence:.2f}%</span></li>", unsafe_allow_html=True)
         st.markdown("</ul>", unsafe_allow_html=True)
-
-st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
