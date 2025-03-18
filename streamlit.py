@@ -65,37 +65,26 @@ st.markdown("""
             border-color: #777;
             transform: scale(1.05);
         }
-        .category-box {
+        .result-row {
             background-color: #444;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             padding: 15px;
             border-radius: 8px;
-            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .category-name {
+        .category-text {
+            text-align: left;
             color: #b5b5b5;
             font-weight: bold;
-            font-size: 18px;
-            margin-bottom: 5px;
+            font-size: 16px;
         }
-        .percentage-bar {
-            background-color: #333;
-            border-radius: 10px;
-            height: 25px;
-            margin-top: 8px;
-            position: relative;
-            overflow: hidden;
-        }
-        .percentage-fill {
-            background-color: #76c7c0;
-            height: 100%;
-            border-radius: 10px;
+        .percentage-text {
             text-align: right;
-            padding-right: 10px;
-            line-height: 25px;
-            color: #fff;
+            color: #76c7c0;
             font-weight: bold;
-            transition: width 1s ease-in-out;
+            font-size: 16px;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -125,15 +114,13 @@ if uploaded_file is not None:
         top_indices = np.argsort(y_pred)[-3:][::-1]
         top_predictions = [(model.classes_[i], y_pred[i] * 100) for i in top_indices]
 
-        st.subheader("Top Matching Job Categories:")
+        st.subheader("Top Matching Job :")
         
-        # Individual boxes for each category
+        # Simple rows with category on left and percentage on right
         for category, confidence in top_predictions:
             st.markdown(f"""
-                <div class="category-box">
-                    <div class="category-name">{category}</div>
-                    <div class="percentage-bar">
-                        <div class="percentage-fill" style="width: {confidence}%;">{confidence:.2f}%</div>
-                    </div>
+                <div class="result-row">
+                    <div class="category-text">{category}</div>
+                    <div class="percentage-text">{confidence:.2f}%</div>
                 </div>
             """, unsafe_allow_html=True)
