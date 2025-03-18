@@ -37,4 +37,4 @@ def predict():
     return render_template('index.html', predictions=top_predictions)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=int(os.getenv("PORT", 10000)))
