@@ -36,11 +36,6 @@ def extract_text(pdf_file):
     doc = fitz.open(stream=pdf_file.read(), filetype='pdf')
     return ''.join(page.get_text() for page in doc)
 
-if uploaded_file is not None:
-    resume_text = extract_text(uploaded_file)
-    st.subheader("Extracted Resume Text:")
-    st.write(resume_text)
-
     # Predict top 3 categories
     X_input = vectorizer.transform([resume_text])
     y_pred = model.predict_proba(X_input)[0]
