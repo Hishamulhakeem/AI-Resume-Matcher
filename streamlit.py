@@ -9,6 +9,11 @@ vectorizer = joblib.load('resumeVector.pkl')
 
 # Streamlit page configuration
 st.set_page_config(page_title="AI Resume Matcher", layout="centered")
+st.write("Upload your resume (PDF format)")
+st.write("Drop a file - Limit of 20MB - ONLY PDF")
+
+# File uploader for resume (PDF format)
+uploaded_file = st.file_uploader("", type=['pdf'], key="pdf_uploader")
 
 # Custom styling
 st.markdown("""
@@ -95,13 +100,6 @@ st.markdown("""
 
 # Main container for title (removed the border-bottom in the CSS above)
 st.markdown('<div class="main-container"><h1>AI Resume Matcher</h1></div>', unsafe_allow_html=True)
-
-# Custom text for file uploader
-st.write("Upload your resume (PDF format)")
-
-# File uploader for resume (PDF format)
-# Modified max size to 20MB
-uploaded_file = st.file_uploader("Drop a file - Limit of 20MB - ONLY PDF", type=['pdf'], key="pdf_uploader")
 
 # Function to extract text from the PDF
 def extract_text(pdf_file):
