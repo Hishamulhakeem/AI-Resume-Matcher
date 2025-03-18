@@ -70,6 +70,7 @@ st.markdown("""
             padding: 20px;
             border-radius: 12px;
             margin-top: 30px;
+            margin-bottom: 20px;
             box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.1);
         }
         ul {
@@ -123,7 +124,7 @@ if uploaded_file is not None:
         top_indices = np.argsort(y_pred)[-3:][::-1]
         top_predictions = [(model.classes_[i], y_pred[i] * 100) for i in top_indices]
 
-        # Prediction box with styling
+        # Structured box for predictions
         st.markdown('<div class="prediction-box">', unsafe_allow_html=True)
         st.subheader("Top Matching Job Categories:")
         st.markdown("<ul>", unsafe_allow_html=True)
