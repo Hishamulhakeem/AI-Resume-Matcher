@@ -31,7 +31,7 @@ st.markdown("""
             font-size: 36px;
             font-weight: bold;
             color: #f4f4f4;
-            border-bottom: 2px solid #777;
+            /* Removed the border-bottom that created the line */
             padding-bottom: 10px;
             letter-spacing: 1px;
         }
@@ -86,14 +86,22 @@ st.markdown("""
             font-weight: bold;
             font-size: 16px;
         }
+        /* Hide the default Streamlit file uploader label */
+        .uploadedFile {
+            display: none;
+        }
     </style>
 """, unsafe_allow_html=True)
 
-# Main container for title
+# Main container for title (removed the border-bottom in the CSS above)
 st.markdown('<div class="main-container"><h1>AI Resume Matcher</h1></div>', unsafe_allow_html=True)
 
+# Custom text for file uploader
+st.write("Upload your resume (PDF format)")
+
 # File uploader for resume (PDF format)
-uploaded_file = st.file_uploader("Upload your resume (PDF format)", type=['pdf'])
+# Modified max size to 20MB
+uploaded_file = st.file_uploader("Drop a file - Limit of 20MB - ONLY PDF", type=['pdf'], key="pdf_uploader")
 
 # Function to extract text from the PDF
 def extract_text(pdf_file):
@@ -114,7 +122,7 @@ if uploaded_file is not None:
         top_indices = np.argsort(y_pred)[-3:][::-1]
         top_predictions = [(model.classes_[i], y_pred[i] * 100) for i in top_indices]
 
-        st.subheader("Top Matching Job :")
+        st.subheader("Top Matching Jobs:")
         
         # Simple rows with category on left and percentage on right
         for category, confidence in top_predictions:
