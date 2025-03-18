@@ -10,7 +10,7 @@ vectorizer = joblib.load('resumeVector.pkl')
 # Streamlit page configuration
 st.set_page_config(page_title="AI Resume Matcher", layout="centered")
 
-# Custom styling for a clean black-and-white theme with a centered button
+# Custom styling for a clean black-and-white theme with centered title
 st.markdown("""
     <style>
         body {
@@ -26,7 +26,7 @@ st.markdown("""
             border-radius: 15px;
             box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.1);
             text-align: center;
-            margin-top: 80px;
+            margin-top: 40px;
             margin-bottom: 30px;
             max-width: 500px;
             margin-left: auto;
@@ -38,6 +38,8 @@ st.markdown("""
             border-bottom: 2px solid #777;
             padding-bottom: 10px;
             letter-spacing: 1px;
+            color: #f4f4f4;
+            text-align: center;
         }
         .stButton button {
             background-color: #000;
@@ -98,9 +100,7 @@ def extract_text(pdf_file):
 
 # Analyze button and prediction logic
 if uploaded_file is not None:
-    centered_button = st.markdown('<div style="text-align: center;">', unsafe_allow_html=True)
     analyze_button = st.button("Analyze Resume")
-    st.markdown('</div>', unsafe_allow_html=True)
 
     if analyze_button:
         resume_text = extract_text(uploaded_file)
