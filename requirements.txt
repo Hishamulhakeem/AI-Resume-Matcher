@@ -4,4 +4,3 @@ joblib==1.2.0
 pymupdf
 PyPDF2
 setuptools  
-distutils  
