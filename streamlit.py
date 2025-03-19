@@ -35,37 +35,7 @@ st.markdown("""
             padding-bottom: 10px;
             letter-spacing: 1px;
         }
-        .container {
-            background-color: #262626;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.1);
-            margin-top: 40px;
-            margin-bottom: 30px;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .stButton button {
-            background-color: #000;
-            color: #fff;
-            padding: 10px 30px;
-            border-radius: 10px;
-            border: 2px solid #444;
-            font-weight: bold;
-            margin-top: 20px;
-            margin-bottom: 20px;
-            transition: 0.3s;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .stButton button:hover {
-            background-color: #333;
-            border-color: #777;
-            transform: scale(1.05);
-        }
-        .result-row {
+        .result-row, .rating-section {
             background-color: #444;
             margin-bottom: 10px;
             padding: 15px;
@@ -73,6 +43,9 @@ st.markdown("""
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+            margin-top: 20px;
+            color: #fff;
         }
         .category-text {
             text-align: left;
@@ -80,23 +53,11 @@ st.markdown("""
             font-weight: bold;
             font-size: 16px;
         }
-        .percentage-text {
+        .percentage-text, .rating-text {
             text-align: right;
             color: #76c7c0;
             font-weight: bold;
             font-size: 16px;
-        }
-        .rating-section {
-            margin-top: 30px;
-            background-color: #333;
-            padding: 20px;
-            border-radius: 10px;
-            color: #fff;
-            text-align: center;
-        }
-        .rating-text {
-            font-weight: bold;
-            font-size: 18px;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -143,9 +104,11 @@ if uploaded_file is not None:
 
         # Calculate and display resume rating
         rating = rate(resume_text, y_pred)
-        
+        rating_message = "Good Resume! It stands out well." if rating >= 70 else ("Average Resume" if rating >= 40 else "Needs Improvement")
+
         st.markdown(f"""
             <div class="rating-section">
-                <div class="rating-text">Resume Rating: {rating:.2f}/100</div>
+                <div class="category-text">Resume Rating:</div>
+                <div class="percentage-text">{rating:.2f}/100 - {rating_message}</div>
             </div>
         """, unsafe_allow_html=True)
