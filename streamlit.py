@@ -76,14 +76,18 @@ st.markdown("""
             font-weight: bold;
             font-size: 18px;
         }
-    </style>
+    ""@keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>""
 """, unsafe_allow_html=True)
 
 # Main container for title
 st.markdown('<div class="main-container"><h1>AI Resume Matcher</h1></div>', unsafe_allow_html=True)
 
 # File uploader for resume (PDF format)
-uploaded_file = st.file_uploader("Upload your resume (PDF format)", type=['pdf'])
+uploaded_file = st.file_uploader("Upload your resume (Only PDF format)", type=['pdf'])
 
 # Function to extract text from the PDF
 def extract_text(pdf_file):
@@ -111,9 +115,11 @@ if uploaded_file is not None:
         st.subheader("Top Matching Jobs:")
 
         # Display top predictions
+        import time
         for category, confidence in top_predictions:
+            time.sleep(0.5)
             st.markdown(f"""
-                <div class="result-row">
+                <div class="result-row" style="animation: fadeIn 0.8s;">
                     <div>{category}</div>
                     <div class="percentage-text">{confidence:.2f}%</div>
                 </div>
