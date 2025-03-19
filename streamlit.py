@@ -58,6 +58,10 @@ st.markdown("""
             justify-content: space-between;
             align-items: center;
         }
+        .percentage-text {
+            color: #76c7c0;
+            font-weight: bold;
+        }
         .rating-section {
             margin-top: 30px;
             background-color: #333;
@@ -67,6 +71,10 @@ st.markdown("""
             text-align: center;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
             font-weight: bold;
+        }
+        .rating-text {
+            font-weight: bold;
+            font-size: 18px;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -107,7 +115,7 @@ if uploaded_file is not None:
             st.markdown(f"""
                 <div class="result-row">
                     <div>{category}</div>
-                    <div>{confidence:.2f}%</div>
+                    <div class="percentage-text">{confidence:.2f}%</div>
                 </div>
             """, unsafe_allow_html=True)
 
@@ -115,7 +123,7 @@ if uploaded_file is not None:
         rating = rate(resume_text, y_pred)
         color = '#ff4d4d' if rating < 45 else '#ffc107' if rating < 75 else '#4caf50'
         st.markdown(f"""
-        <div class="rating-section" style="background-color: {color};">
-            Resume Rating: {rating:.2f}%
+        <div class="rating-section">
+            <div class="rating-text" style="color: {color};">Resume Rating: {rating:.2f}%</div>
         </div>
         """, unsafe_allow_html=True)
