@@ -85,7 +85,7 @@ def rate(resume_text, y_pred):
 
 # Analyze button and prediction logic
 if uploaded_file is not None:
-    analyze_button = st.button("Analyze Resume")
+    <div style='display: flex; justify-content: center; margin-top: 20px;'>{st.button("Analyze Resume", help="Click to analyze your resume!", key='analyze_button')}</div>
 
     if analyze_button:
         resume_text = extract_text(uploaded_file)
@@ -110,11 +110,9 @@ if uploaded_file is not None:
 
         # Calculate and display resume rating
         rating = rate(resume_text, y_pred)
-        rating_message = "Good Resume! It stands out well." if rating >= 70 else ("Average Resume" if rating >= 40 else "Needs Improvement")
-
+    
         st.markdown(f"""
             <div class="rating-section">
                 <div class="rating-text">Resume Rating: {rating:.2f}/100</div>
-                <div class="rating-text">{rating_message}</div>
             </div>
         """, unsafe_allow_html=True)
