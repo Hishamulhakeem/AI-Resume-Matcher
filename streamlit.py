@@ -1,8 +1,78 @@
-.rating-section { background-color: #333; margin-bottom: 10px; padding: 20px; border-radius: 8px; display: flex; justify-content: center; align-items: center; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5); margin-top: 20px; color: #fff; font-weight: bold; }
+import streamlit as st
+import joblib
+import fitz  # PyMuPDF
+import numpy as np
+
+# Load the pre-trained model and vectorizer
+model = joblib.load('resumeClassifier.pkl')
+vectorizer = joblib.load('resumeVector.pkl')
+
+# Streamlit page configuration
+st.set_page_config(page_title="AI Resume Matcher", layout="centered")
+
+# Custom styling
+st.markdown("""
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: #f4f4f4;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .main-container {
+            margin-top: 30px;
+            padding: 40px;
+            text-align: center;
+        }
+        h1 {
+            margin-top: 20px;
+            margin-bottom: 30px;
+            font-size: 36px;
+            font-weight: bold;
+            color: #f4f4f4;
+            letter-spacing: 1px;
+        }
+        .stButton button {
+            background-color: #000;
+            color: #fff;
+            padding: 10px 30px;
+            border-radius: 10px;
+            border: 2px solid #444;
+            font-weight: bold;
+            margin: 20px auto;
+            display: block;
+            transition: 0.3s;
+        }
+        .stButton button:hover {
+            background-color: #333;
+            border-color: #777;
+            transform: scale(1.05);
+        }
+        .result-row {
+            background-color: #444;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .rating-section {
+            margin-top: 30px;
+            background-color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            color: #fff;
+            text-align: center;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+            font-weight: bold;
+        }
     </style>
+""", unsafe_allow_html=True)
 
 # Main container for title
-st.markdown('<div class="main-container" style="text-align: center;"><h1>AI Resume Matcher</h1></div>', unsafe_allow_html=True)
+st.markdown('<div class="main-container"><h1>AI Resume Matcher</h1></div>', unsafe_allow_html=True)
 
 # File uploader for resume (PDF format)
 uploaded_file = st.file_uploader("Upload your resume (PDF format)", type=['pdf'])
@@ -14,17 +84,11 @@ def extract_text(pdf_file):
 
 # Function to calculate resume rating
 def rate(resume_text, y_pred):
-    rating = round(np.max(y_pred) * 100, 2)
-    color = '#ff4d4d' if rating < 40 else '#ffc107' if rating < 75 else '#4caf50'
-    return rating, color
+    return round(np.max(y_pred) * 100, 2)
 
 # Analyze button and prediction logic
 if uploaded_file is not None:
-    analyze_button = st.markdown("""
-    <div style='display: flex; justify-content: center; margin-top: 20px;'>
-        <button style='background-color: #000; color: #fff; padding: 10px 30px; border-radius: 10px; border: 2px solid #444; font-weight: bold; cursor: pointer;'>Analyze Resume</button>
-    </div>
-    """, unsafe_allow_html=True)
+    analyze_button = st.button("Analyze Resume")
 
     if analyze_button:
         resume_text = extract_text(uploaded_file)
@@ -42,17 +106,16 @@ if uploaded_file is not None:
         for category, confidence in top_predictions:
             st.markdown(f"""
                 <div class="result-row">
-                    <div class="category-text">{category}</div>
-                    <div class="percentage-text">{confidence:.2f}%</div>
+                    <div>{category}</div>
+                    <div>{confidence:.2f}%</div>
                 </div>
             """, unsafe_allow_html=True)
 
         # Calculate and display resume rating
-        rating, color = rate(resume_text, y_pred)
+        rating = rate(resume_text, y_pred)
+        color = '#ff4d4d' if rating < 45 else '#ffc107' if rating < 75 else '#4caf50'
         st.markdown(f"""
-        <div class="rating-section">
-            <div class="rating-text" style="color: {color};">
-                Resume Rating: {rating:.2f}%
-            </div>
+        <div class="rating-section" style="background-color: {color};">
+            Resume Rating: {rating:.2f}%
         </div>
         """, unsafe_allow_html=True)
