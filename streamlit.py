@@ -1,7 +1,8 @@
-.rating-section { background-color: #333; margin-bottom: 10px; padding: 20px; border-radius: 8px; display: flex; justify-content: center; align-items: center; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5); margin-top: 20px; color: #fff; font-weight: bold; }w_html=True)
+.rating-section { background-color: #333; margin-bottom: 10px; padding: 20px; border-radius: 8px; display: flex; justify-content: center; align-items: center; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5); margin-top: 20px; color: #fff; font-weight: bold; }
+    </style>
 
 # Main container for title
-st.markdown('<div class="main-container"><h1>AI Resume Matcher</h1></div>', unsafe_allow_html=True)
+st.markdown('<div class="main-container" style="text-align: center;"><h1>AI Resume Matcher</h1></div>', unsafe_allow_html=True)
 
 # File uploader for resume (PDF format)
 uploaded_file = st.file_uploader("Upload your resume (PDF format)", type=['pdf'])
@@ -19,7 +20,11 @@ def rate(resume_text, y_pred):
 
 # Analyze button and prediction logic
 if uploaded_file is not None:
-    analyze_button = st.markdown("<div style='display: flex; justify-content: center; margin-top: 20px;'><button style='background-color: #000; color: #fff; padding: 10px 30px; border-radius: 10px; border: 2px solid #444; font-weight: bold; cursor: pointer;'>Analyze Resume</button></div>", unsafe_allow_html=True)
+    analyze_button = st.markdown("""
+    <div style='display: flex; justify-content: center; margin-top: 20px;'>
+        <button style='background-color: #000; color: #fff; padding: 10px 30px; border-radius: 10px; border: 2px solid #444; font-weight: bold; cursor: pointer;'>Analyze Resume</button>
+    </div>
+    """, unsafe_allow_html=True)
 
     if analyze_button:
         resume_text = extract_text(uploaded_file)
@@ -38,7 +43,7 @@ if uploaded_file is not None:
             st.markdown(f"""
                 <div class="result-row">
                     <div class="category-text">{category}</div>
-                    <div class="percentage-text" style='color: {'#ff4d4d' if confidence < 40 else '#ffc107' if confidence < 75 else '#4caf50'};'>{confidence:.2f}%</div>
+                    <div class="percentage-text">{confidence:.2f}%</div>
                 </div>
             """, unsafe_allow_html=True)
 
