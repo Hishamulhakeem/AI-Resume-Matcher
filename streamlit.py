@@ -81,7 +81,9 @@ def extract_text(pdf_file):
 
 # Function to calculate resume rating
 def rate(resume_text, y_pred):
-    return round(np.max(y_pred) * 100, 2)
+    rating = round(np.max(y_pred) * 100, 2)
+    color = '#ff4d4d' if rating < 40 else '#ffc107' if rating < 75 else '#4caf50'
+    return rating, color
 
 # Analyze button and prediction logic
 if uploaded_file is not None:
@@ -109,10 +111,13 @@ if uploaded_file is not None:
             """, unsafe_allow_html=True)
 
         # Calculate and display resume rating
-        rating = rate(resume_text, y_pred)
-    
+        rating, color = rate(resume_text, y_pred)
+        rating_message = "Good Resume! It stands out well." if rating >= 70 else ("Average Resume" if rating >= 40 else "Needs Improvement")
+
         st.markdown(f"""
-            <div class="rating-section">
-                <div class="rating-text">Resume Rating: {rating:.2f}/100</div>
-            </div>
-        """, unsafe_allow_html=True)
+<div class="rating-section">
+    <div class="rating-text" style="color: {'#ff4d4d' if rating < 40 else '#ffc107' if rating < 75 else '#4caf50'};">
+        Resume Rating: <span style='color: {color};'>{rating:.2f}%</span>
+    </div>
+</div>
+""", unsafe_allow_html=True)
