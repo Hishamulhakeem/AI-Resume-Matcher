@@ -113,8 +113,8 @@ def extract_text(pdf_file):
     return ''.join(page.get_text() for page in doc)
 
 # Function to calculate resume rating
-def calculate_rating(confidences):
-    return round(np.mean(confidences), 2)
+def rate(resume_text, y_pred):
+    return round(np.max(y_pred) * 100, 2)
 
 # Analyze button and prediction logic
 if uploaded_file is not None:
@@ -141,12 +141,12 @@ if uploaded_file is not None:
                 </div>
             """, unsafe_allow_html=True)
 
-        # Display resume rating
-        rating = calculate_rating([confidence for _, confidence in top_predictions])
+        # Calculate and display resume rating
+        rating = rate(resume_text, y_pred)
         rating_message = "Good Resume! It stands out well." if rating >= 70 else ("Average Resume" if rating >= 40 else "Needs Improvement")
 
         st.markdown(f"""
             <div class="rating-section">
-                <div class="rating-text">Resume Rating: {rating:.2f}% - {rating_message}</div>
+                <div class="rating-text">Resume Rating: {rating:.2f}/100 - {rating_message}</div>
             </div>
         """, unsafe_allow_html=True)
