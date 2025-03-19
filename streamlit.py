@@ -55,7 +55,6 @@ st.markdown("""
         }
         .percentage-text, .rating-text {
             text-align: right;
-            color: #76c7c0;
             font-weight: bold;
             font-size: 16px;
         }
@@ -87,7 +86,7 @@ def rate(resume_text, y_pred):
 
 # Analyze button and prediction logic
 if uploaded_file is not None:
-    <div style='display: flex; justify-content: center; margin-top: 20px;'>{st.button("Analyze Resume", help="Click to analyze your resume!", key='analyze_button')}</div>
+    analyze_button = st.button("Analyze Resume", help="Click to analyze your resume!", key='analyze_button')
 
     if analyze_button:
         resume_text = extract_text(uploaded_file)
@@ -106,18 +105,16 @@ if uploaded_file is not None:
             st.markdown(f"""
                 <div class="result-row">
                     <div class="category-text">{category}</div>
-                    <div class="percentage-text">{confidence:.2f}%</div>
+                    <div class="percentage-text" style='color: {'#ff4d4d' if confidence < 40 else '#ffc107' if confidence < 75 else '#4caf50'};'>{confidence:.2f}%</div>
                 </div>
             """, unsafe_allow_html=True)
 
         # Calculate and display resume rating
         rating, color = rate(resume_text, y_pred)
-        rating_message = "Good Resume! It stands out well." if rating >= 70 else ("Average Resume" if rating >= 40 else "Needs Improvement")
-
         st.markdown(f"""
-<div class="rating-section">
-    <div class="rating-text" style="color: {'#ff4d4d' if rating < 40 else '#ffc107' if rating < 75 else '#4caf50'};">
-        Resume Rating: <span style='color: {color};'>{rating:.2f}%</span>
-    </div>
-</div>
-""", unsafe_allow_html=True)
+        <div class="rating-section">
+            <div class="rating-text" style="color: {color};">
+                Resume Rating: {rating:.2f}%
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
