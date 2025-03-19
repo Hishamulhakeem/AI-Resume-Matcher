@@ -1,71 +1,4 @@
-import streamlit as st
-import joblib
-import fitz  # PyMuPDF
-import numpy as np
-
-# Load the pre-trained model and vectorizer
-model = joblib.load('resumeClassifier.pkl')
-vectorizer = joblib.load('resumeVector.pkl')
-
-# Streamlit page configuration
-st.set_page_config(page_title="AI Resume Matcher", layout="centered")
-
-# Custom styling
-st.markdown("""
-    <style>
-        body {
-            background-color: #1a1a1a;
-            color: #f4f4f4;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        .main-container {
-            margin-top: 30px;
-            padding: 40px;
-            text-align: center;
-        }
-        h1 {
-            margin-top: 20px;
-            margin-bottom: 30px;
-            font-size: 36px;
-            font-weight: bold;
-            color: #f4f4f4;
-            border-bottom: 2px solid #777;
-            padding-bottom: 10px;
-            letter-spacing: 1px;
-        }
-        .result-row, .rating-section {
-            background-color: #444;
-            margin-bottom: 10px;
-            padding: 15px;
-            border-radius: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
-            margin-top: 20px;
-            color: #fff;
-        }
-        .category-text {
-            text-align: left;
-            color: #b5b5b5;
-            font-weight: bold;
-            font-size: 16px;
-        }
-        .percentage-text, .rating-text {
-            text-align: right;
-            font-weight: bold;
-            font-size: 16px;
-        }
-        .rating-section {
-            justify-content: center;
-            flex-direction: column;
-            text-align: center;
-            padding: 20px;
-        }
-    </style>
-""", unsafe_allow_html=True)
+.rating-section { background-color: #333; margin-bottom: 10px; padding: 20px; border-radius: 8px; display: flex; justify-content: center; align-items: center; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5); margin-top: 20px; color: #fff; font-weight: bold; }w_html=True)
 
 # Main container for title
 st.markdown('<div class="main-container"><h1>AI Resume Matcher</h1></div>', unsafe_allow_html=True)
@@ -86,7 +19,7 @@ def rate(resume_text, y_pred):
 
 # Analyze button and prediction logic
 if uploaded_file is not None:
-    analyze_button = st.button("Analyze Resume", help="Click to analyze your resume!", key='analyze_button')
+    analyze_button = st.markdown("<div style='display: flex; justify-content: center; margin-top: 20px;'><button style='background-color: #000; color: #fff; padding: 10px 30px; border-radius: 10px; border: 2px solid #444; font-weight: bold; cursor: pointer;'>Analyze Resume</button></div>", unsafe_allow_html=True)
 
     if analyze_button:
         resume_text = extract_text(uploaded_file)
