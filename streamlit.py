@@ -143,10 +143,9 @@ if uploaded_file is not None:
 
         # Calculate and display resume rating
         rating = rate(resume_text, y_pred)
-        rating_message = "Good Resume! It stands out well." if rating >= 70 else ("Average Resume" if rating >= 40 else "Needs Improvement")
-
+        
         st.markdown(f"""
             <div class="rating-section">
-                <div class="rating-text">Resume Rating: {rating:.2f}/100 - {rating_message}</div>
+                <div class="rating-text">Resume Rating: {rating:.2f}/100</div>
             </div>
         """, unsafe_allow_html=True)
