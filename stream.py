@@ -94,7 +94,7 @@ def extract_text(pdf_file):
     text = ''.join(page.get_text() for page in doc)
 
     # Validate if it's a resume using common resume keywords
-   resume_keywords = ["education", "experience", "skills", "projects", "certifications", "summary", "degree", "achievements"]
+  resume_keywords = ["education", "experience", "skills", "projects", "certifications", "summary", "degree", "achievements"]
     if any(keyword in text.lower() for keyword in resume_keywords) and len(text.split()) > 50:
         return text
     else:
