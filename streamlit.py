@@ -86,6 +86,18 @@ st.markdown("""
             font-weight: bold;
             font-size: 16px;
         }
+        .rating-section {
+            margin-top: 30px;
+            background-color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            color: #fff;
+            text-align: center;
+        }
+        .rating-text {
+            font-weight: bold;
+            font-size: 18px;
+        }
     </style>
 """, unsafe_allow_html=True)
 
@@ -99,6 +111,11 @@ uploaded_file = st.file_uploader("Upload your resume (PDF format)", type=['pdf']
 def extract_text(pdf_file):
     doc = fitz.open(stream=pdf_file.read(), filetype='pdf')
     return ''.join(page.get_text() for page in doc)
+
+# Function to calculate resume rating
+def calculate_rating(confidences):
+    rating = round(np.mean(confidences) * 100, 2)
+    return rating
 
 # Analyze button and prediction logic
 if uploaded_file is not None:
@@ -115,8 +132,8 @@ if uploaded_file is not None:
         top_predictions = [(model.classes_[i], y_pred[i] * 100) for i in top_indices]
 
         st.subheader("Top Matching Jobs:")
-        
-        # Simple rows with category on left and percentage on right
+
+        # Display top predictions
         for category, confidence in top_predictions:
             st.markdown(f"""
                 <div class="result-row">
@@ -124,3 +141,13 @@ if uploaded_file is not None:
                     <div class="percentage-text">{confidence:.2f}%</div>
                 </div>
             """, unsafe_allow_html=True)
+
+        # Display resume rating
+        rating = calculate_rating([confidence for _, confidence in top_predictions])
+        rating_message = "Good Resume! It stands out well." if rating >= 70 else ("Average Resume" if rating >= 40 else "Needs Improvement")
+
+        st.markdown(f"""
+            <div class="rating-section">
+                <div class="rating-text">Resume Rating: {rating:.2f}% - {rating_message}</div>
+            </div>
+        """, unsafe_allow_html=True)
