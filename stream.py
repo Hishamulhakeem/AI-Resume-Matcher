@@ -133,10 +133,10 @@ if uploaded_file is not None:
             """, unsafe_allow_html=True)
 
         # Calculate and display resume rating
-        rating = rate(resume_text, y_pred)
+        rating = rate(resume_text, y_pred) + 10
         color = '#ff4d4d' if rating < 45 else '#ffc107' if rating < 75 else '#4caf50'
         st.markdown(f"""
         <div class="rating-section">
-            <div class="rating-text" style="color: {color};">Resume Rating: {rating:.2f}%</div>
+            <div class="rating-text" style="color: {color};">Resume Rating : {rating:.2f}%</div>
         </div>
         """, unsafe_allow_html=True)
