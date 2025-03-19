@@ -59,6 +59,12 @@ st.markdown("""
             font-weight: bold;
             font-size: 16px;
         }
+        .rating-section {
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            padding: 20px;
+        }
     </style>
 """, unsafe_allow_html=True)
 
@@ -108,7 +114,7 @@ if uploaded_file is not None:
 
         st.markdown(f"""
             <div class="rating-section">
-                <div class="category-text">Resume Rating:</div>
-                <div class="percentage-text">{rating:.2f}/100 - {rating_message}</div>
+                <div class="rating-text">Resume Rating: {rating:.2f}/100</div>
+                <div class="rating-text">{rating_message}</div>
             </div>
         """, unsafe_allow_html=True)
