@@ -1,14 +1,14 @@
 import streamlit as st
 import joblib
-import fitz  # PyMuPDF
+import fitz  
 import numpy as np
 
 model = joblib.load('Classifier.pkl')
 vectorizer = joblib.load('Vector.pkl')
 
 allowed_domains = {
-    'Computer Science ': ['Data Science', 'Java Developer', 'Python Developer', 'DotNet Developer'],
-    'AI/ML Engineer' : ['AI/ML Engineer'],
+    'Computer Science': ['Data Science', 'Java Developer', 'Python Developer', 'DotNet Developer'],
+    'AI/ML Engineer': ['AI/ML Engineer'],
     'Mechanical Engineer': ['Mechanical Engineer'],
     'Civil Engineer': ['Civil Engineer'],
     'Electrical Engineer': ['Electrical Engineering'],
@@ -29,8 +29,8 @@ st.markdown("""
         .stButton button:hover { background: #333; transform: scale(1.05); }
         .result-row { background: #444; padding: 10px; border-radius: 8px; margin-bottom: 5px; }
         .percentage-text { color: #76c7c0; font-weight: bold; }
-        .rating-section { background: #333; padding: 15px; border-radius: 8px; margin-top: 20px; }
-        .disclaimer { font-size: 12px; color: #bbb; margin-top: 20px; text-align: center; }
+        .rating-section { background: #333; padding: 15px; border-radius: 8px; margin-top: 20px; text-align: center; }
+        .disclaimer { font-size: 12px; color: #bbb; margin-top: 30px; text-align: center; }
     </style>
 """, unsafe_allow_html=True)
 
@@ -66,11 +66,12 @@ if uploaded_file:
                 st.markdown(f'<div class="result-row"><div>{category}</div><div class="percentage-text">{confidence:.2f}%</div></div>',
                             unsafe_allow_html=True)
 
-            rating = rate(y_pred) + 10  # Boosting score by 10
+            rating = rate(y_pred) + 7  
             color = '#ff4d4d' if rating < 45 else '#ffc107' if rating < 75 else '#4caf50'
             st.markdown(f'<div class="rating-section"><div style="color: {color}; font-weight: bold;">Resume Rating: {rating:.2f}%</div></div>',
                         unsafe_allow_html=True)
 
+st.markdown("<br><br>", unsafe_allow_html=True)
 
 domain_text = ", ".join(allowed_domains.keys())
-st.markdown(f'<div class="disclaimer">Allowed Job Domains: {domain_text}</div>', unsafe_allow_html=True)
+st.caption(f"**Allowed Job Domains:** {domain_text}")
