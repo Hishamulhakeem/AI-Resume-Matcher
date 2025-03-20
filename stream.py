@@ -27,10 +27,10 @@ st.markdown("""
         h1 { font-size: 36px; font-weight: bold; }
         .stButton button { background: #000; color: #fff; border-radius: 10px; }
         .stButton button:hover { background: #333; transform: scale(1.05); }
-        .result-row { background: #444; padding: 10px; border-radius: 8px; margin-bottom: 5px; }
+        .result-row { background: #444; padding: 10px; border-radius: 8px; margin-bottom: 5px; display: flex; justify-content: space-between; }
         .percentage-text { color: #76c7c0; font-weight: bold; }
         .rating-section { background: #333; padding: 15px; border-radius: 8px; margin-top: 20px; text-align: center; }
-        .disclaimer { font-size: 12px; color: #bbb; margin-top: 30px; position: fixed; bottom: 10px; left: 10px; text-align: right; }
+        .disclaimer { font-size: 12px; color: #bbb; margin-top: 30px; position: fixed; bottom: 10px; left: 10px; text-align: left; }
     </style>
 """, unsafe_allow_html=True)
 
@@ -71,10 +71,9 @@ if uploaded_file:
             st.markdown(f'<div class="rating-section"><div style="color: {color}; font-weight: bold;">Resume Rating: {rating:.2f}%</div></div>',
                         unsafe_allow_html=True)
 
-
 domain_text = ", ".join(allowed_domains.keys())
 st.markdown(f"""
     <div class="disclaimer">
-        <p><strong>disclaimer \n Job Domains:</strong> {domain_text}</p>
+        <p><strong>Allowed Job Domains:</strong> {domain_text}</p>
     </div>
 """, unsafe_allow_html=True)
