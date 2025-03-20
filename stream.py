@@ -30,7 +30,7 @@ st.markdown("""
         .result-row { background: #444; padding: 10px; border-radius: 8px; margin-bottom: 5px; }
         .percentage-text { color: #76c7c0; font-weight: bold; }
         .rating-section { background: #333; padding: 15px; border-radius: 8px; margin-top: 20px; text-align: center; }
-        .disclaimer { font-size: 12px; color: #bbb; margin-top: 30px; position: fixed; bottom: 10px; right: 10px; text-align: right; }
+        .disclaimer { font-size: 12px; color: #bbb; margin-top: 30px; position: fixed; bottom: 10px; left: 10px; text-align: right; }
     </style>
 """, unsafe_allow_html=True)
 
