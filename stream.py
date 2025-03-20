@@ -6,29 +6,26 @@ import numpy as np
 model = joblib.load('Classifier.pkl')
 vectorizer = joblib.load('Vector.pkl')
 
-allowed_domains = {
-    'Computer Science': ['Data Science', 'Java Developer', 'Python Developer', 'DotNet Developer'],
-    'AI/ML Engineer': ['AI/ML Engineer'],
-    'Mechanical Engineer': ['Mechanical Engineer'],
-    'Civil Engineer': ['Civil Engineer'],
-    'Electrical Engineer': ['Electrical Engineering'],
-    'Business & Management': ['HR', 'Business Analyst', 'Operations Manager', 'PMO'],
-    'Software & IT': ['SAP Developer', 'Automation Testing', 'DevOps Engineer', 'Database', 'Hadoop', 'ETL Developer', 'Blockchain', 'Testing'],
-    'Creative & Others': ['Web Designing', 'Advocate', 'Arts', 'Health and fitness', 'Sales']
-}
-
-allowed_categories = [item for sublist in allowed_domains.values() for item in sublist]
+allowed_categories = [
+    'Mechanical Engineer', 
+    'Creative ',
+     'Software & IT',
+     'Business & Management',
+    'Electrical Engineer',
+    'Civil Engineer',
+    'AI/ML Engineer',
+    'Computer Science'
+]
 
 st.set_page_config(page_title="AI Resume Matcher", layout="centered")
 
 st.markdown("""
     <style>
-        .main-container { text-align: center; margin-top: 10px; } /* Title moved higher */
-        h1 { font-size: 36px; font-weight: bold; margin-bottom: 5px; }
-        .stButton { display: flex; justify-content: center; } /* Centering button */
-        .stButton button { background: #000; color: #fff; border-radius: 10px; }
-        .stButton button:hover { background: #333; transform: scale(1.05); }
-        .result-row { background: #444; padding: 10px; border-radius: 8px; margin-bottom: 5px; display: flex; justify-content: space-between; }
+        .main-container { text-align: center; margin-top: 10px; }
+        h1 { font-size: 36px; font-weight: bold; }
+        .stButton button { background-color: #000; color: #fff; border-radius: 10px; }
+        .stButton button:hover { background-color: #333; transform: scale(1.05); }
+        .result-row { background-color: #444; padding: 10px; border-radius: 8px; margin-bottom: 5px; display: flex; justify-content: space-between; }
         .percentage-text { color: #76c7c0; font-weight: bold; }
         .rating-section { background: #333; padding: 15px; border-radius: 8px; margin-top: 20px; text-align: center; }
         .disclaimer { font-size: 12px; color: #bbb; position: fixed; bottom: 10px; left: 10px; text-align: left; }
@@ -43,7 +40,8 @@ def extract_text(pdf_file):
     doc = fitz.open(stream=pdf_file.read(), filetype='pdf')
     text = ''.join(page.get_text() for page in doc)
     
-    if any(k in text.lower() for k in ["education", "experience", "skills", "projects"]) and len(text.split()) > 50:
+    resume_keywords = ["education", "experience", "skills", "projects", "certifications", "summary", "degree", "achievements"]
+    if any(keyword in text.lower() for keyword in resume_keywords) and len(text.split()) > 50:
         return text
     else:
         st.warning("⚠️ Invalid PDF: Not a resume or insufficient content.")
@@ -52,31 +50,40 @@ def extract_text(pdf_file):
 def rate(y_pred):
     return round(np.max(y_pred) * 100, 2)
 
-if uploaded_file:
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        if st.button("Analyze Resume"):
-            resume_text = extract_text(uploaded_file)
-            if resume_text:
-                X_input = vectorizer.transform([resume_text])
-                y_pred = model.predict_proba(X_input)[0]
-                
-                top_indices = np.argsort(y_pred)[-3:][::-1]
-                top_predictions = [(model.classes_[i], y_pred[i] * 100) for i in top_indices if model.classes_[i] in allowed_categories]
+if uploaded_file is not None:
+    analyze_button = st.button("Analyze Resume")
 
-                st.subheader("Top Matching Jobs:")
-                for category, confidence in top_predictions:
-                    st.markdown(f'<div class="result-row"><div>{category}</div><div class="percentage-text">{confidence:.2f}%</div></div>',
-                                unsafe_allow_html=True)
+    if analyze_button:
+        resume_text = extract_text(uploaded_file)
+        
+        if resume_text:
+            X_input = vectorizer.transform([resume_text])
+            y_pred = model.predict_proba(X_input)[0]
 
-                rating = rate(y_pred) + 10
-                color = '#ff4d4d' if rating < 45 else '#ffc107' if rating < 75 else '#4caf50'
-                st.markdown(f'<div class="rating-section"><div style="color: {color}; font-weight: bold;">Resume Rating: {rating:.2f}%</div></div>',
-                            unsafe_allow_html=True)
+            top_indices = np.argsort(y_pred)[-3:][::-1]
+            top_predictions = [(model.classes_[i], y_pred[i] * 100) for i in top_indices if model.classes_[i] in allowed_categories]
 
-domain_text = ", ".join(allowed_domains.keys())
+            st.subheader("Top Matching Jobs:")
+
+            for category, confidence in top_predictions:
+                st.markdown(f"""
+                    <div class="result-row">
+                        <div>{category}</div>
+                        <div class="percentage-text">{confidence:.2f}%</div>
+                    </div>
+                """, unsafe_allow_html=True)
+
+            rating = rate(y_pred) + 10
+            color = '#ff4d4d' if rating < 45 else '#ffc107' if rating < 75 else '#4caf50'
+            st.markdown(f"""
+                <div class="rating-section">
+                    <div class="rating-text" style="color: {color};">Resume Rating: {rating:.2f}%</div>
+                </div>
+            """, unsafe_allow_html=True)
+
+domain_text = ", ".join(allowed_categories)
 st.markdown(f"""
     <div class="disclaimer">
-        <p><strong>Allowed Job Domains:</strong> {domain_text}</p>
+        <p><strong>Disclaimer Job Domains:</strong> {domain_text}</p>
     </div>
 """, unsafe_allow_html=True)
