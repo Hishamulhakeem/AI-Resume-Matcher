@@ -114,7 +114,7 @@ if uploaded_file is not None:
         top_predictions = [(model.classes_[i], y_pred[i] * 100) for i in top_indices]
 
         st.subheader("Top Matching Jobs:")
-s
+
         import time
         for category, confidence in top_predictions:
             time.sleep(0.5)
