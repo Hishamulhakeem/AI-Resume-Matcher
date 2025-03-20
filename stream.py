@@ -23,14 +23,15 @@ st.set_page_config(page_title="AI Resume Matcher", layout="centered")
 
 st.markdown("""
     <style>
-        .main-container { text-align: center; margin-top: 30px; }
-        h1 { font-size: 36px; font-weight: bold; }
+        .main-container { text-align: center; margin-top: 10px; } /* Title moved higher */
+        h1 { font-size: 36px; font-weight: bold; margin-bottom: 5px; }
+        .stButton { display: flex; justify-content: center; } /* Centering button */
         .stButton button { background: #000; color: #fff; border-radius: 10px; }
         .stButton button:hover { background: #333; transform: scale(1.05); }
         .result-row { background: #444; padding: 10px; border-radius: 8px; margin-bottom: 5px; display: flex; justify-content: space-between; }
         .percentage-text { color: #76c7c0; font-weight: bold; }
         .rating-section { background: #333; padding: 15px; border-radius: 8px; margin-top: 20px; text-align: center; }
-        .disclaimer { font-size: 12px; color: #bbb; margin-top: 30px; position: fixed; bottom: 10px; left: 10px; text-align: left; }
+        .disclaimer { font-size: 12px; color: #bbb; position: fixed; bottom: 10px; left: 10px; text-align: left; }
     </style>
 """, unsafe_allow_html=True)
 
@@ -52,24 +53,26 @@ def rate(y_pred):
     return round(np.max(y_pred) * 100, 2)
 
 if uploaded_file:
-    if st.button("Analyze Resume"):
-        resume_text = extract_text(uploaded_file)
-        if resume_text:
-            X_input = vectorizer.transform([resume_text])
-            y_pred = model.predict_proba(X_input)[0]
-            
-            top_indices = np.argsort(y_pred)[-3:][::-1]
-            top_predictions = [(model.classes_[i], y_pred[i] * 100) for i in top_indices if model.classes_[i] in allowed_categories]
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        if st.button("Analyze Resume"):
+            resume_text = extract_text(uploaded_file)
+            if resume_text:
+                X_input = vectorizer.transform([resume_text])
+                y_pred = model.predict_proba(X_input)[0]
+                
+                top_indices = np.argsort(y_pred)[-3:][::-1]
+                top_predictions = [(model.classes_[i], y_pred[i] * 100) for i in top_indices if model.classes_[i] in allowed_categories]
 
-            st.subheader("Top Matching Jobs:")
-            for category, confidence in top_predictions:
-                st.markdown(f'<div class="result-row"><div>{category}</div><div class="percentage-text">{confidence:.2f}%</div></div>',
+                st.subheader("Top Matching Jobs:")
+                for category, confidence in top_predictions:
+                    st.markdown(f'<div class="result-row"><div>{category}</div><div class="percentage-text">{confidence:.2f}%</div></div>',
+                                unsafe_allow_html=True)
+
+                rating = rate(y_pred) + 10
+                color = '#ff4d4d' if rating < 45 else '#ffc107' if rating < 75 else '#4caf50'
+                st.markdown(f'<div class="rating-section"><div style="color: {color}; font-weight: bold;">Resume Rating: {rating:.2f}%</div></div>',
                             unsafe_allow_html=True)
-
-            rating = rate(y_pred) + 10
-            color = '#ff4d4d' if rating < 45 else '#ffc107' if rating < 75 else '#4caf50'
-            st.markdown(f'<div class="rating-section"><div style="color: {color}; font-weight: bold;">Resume Rating: {rating:.2f}%</div></div>',
-                        unsafe_allow_html=True)
 
 domain_text = ", ".join(allowed_domains.keys())
 st.markdown(f"""
